@@ -1,16 +1,23 @@
 const DB = require("./db.json");
 const { saveToDatabase } = require("./utils");
 
-const getAllWorkouts = () => {
+const getAllWorkouts = (filterParams) => {
   try {
-    return DB.workouts;
+    let workouts = DB.workouts;
+    if (filterParams.mode) {
+      return DB.workouts.filter((workout) =>
+        workout.mode.toLowerCase().includes(filterParams.mode)
+      );
+    }
+    //only if statement here for different paramaters
+    return workouts;
   } catch (error) {
     throw { status: 500, message: error };
   }
 };
 
 const getOneWorkout = (workoutId) => {
-try {
+  try {
     const workout = DB.workouts.find((workout) => workout.id === workoutId);
     if (!workout) {
       throw {
